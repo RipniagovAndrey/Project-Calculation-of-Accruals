@@ -10,12 +10,13 @@ def CalculatiocAccruals(abonents_df, st_standard=0, st_counter=0):
     try:
         accruals = []
         for index, row in abonents_df.iterrows():
-            if row["Тип начисления"] == 1:
-                accruals.append(st_standard)
-            elif row["Тип начисления"] == 2:
-                accruals.append(round((row["Текущее"] - row["Предыдущее"]) * st_counter, 2))
-            else:
-                accruals.append(0)
+            match row["Тип начисления"]:
+                case 1:
+                    accruals.append(st_standard)
+                case 2:
+                    accruals.append(round((row["Текущее"] - row["Предыдущее"]) * st_counter, 2))
+                case _:
+                    accruals.append(0)
         abonents_df["Начислено"] = accruals
         return abonents_df
     except Exception:
